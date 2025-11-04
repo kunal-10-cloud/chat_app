@@ -6,8 +6,9 @@
     "node": ">=20.0.0"
   },
   "scripts": {
-    "build": "npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend",
-    "start": "npm run start --prefix backend"
+    "build": "cd backend && npm install && cd ../frontend && npm install && npm run build",
+    "start": "cd backend && node src/server.js",
+    "install:all": "cd backend && npm install && cd ../frontend && npm install"
   },
   "keywords": [],
   "author": "",

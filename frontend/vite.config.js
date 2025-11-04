@@ -1,13 +1,40 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { fileURLToPath } from 'node:url';
+import { dirname, resolve } from 'node:path';
 
-// https://vite.dev/config/
-export default defineConfig({
-  base: './',  // This ensures assets are loaded correctly in production
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// https://vitejs.dev/config/
+export default defineConfig(({ mode }) => ({
+  base: './',
   plugins: [react()],
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, './src'),
+    },
+  },
+  server: {
+    port: 5173,
+    strictPort: true,
+  },
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
-    sourcemap: true
-  }
-})
+    sourcemap: true,
+    minify: 'terser',
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          react: ['react', 'react-dom', 'react-router-dom'],
+          vendor: ['axios', 'zustand'],
+        },
+      },
+    },
+  },
+  define: {
+    'process.env': {},
+    __APP_ENV__: JSON.stringify(mode === 'production' ? 'production' : 'development'),
+  },
+}));
