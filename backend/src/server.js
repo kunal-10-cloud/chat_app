@@ -22,6 +22,7 @@ const allowedOrigins = [
   'https://chat-app-5j4p.onrender.com',
   'https://chat-app-z0h2.onrender.com'
 ];
+app.use(cors())
 
 // Simple CORS middleware
 app.use((req, res, next) => {
